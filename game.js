@@ -1,17 +1,39 @@
+let playerStarter = null;
+
+// Starter buttons
+const starterButtons = document.querySelectorAll(".starterBtn");
+
+starterButtons.forEach(button => {
+  button.onclick = function() {
+    // Save starter choice
+    playerStarter = button.dataset.starter;
+
+    // Show confirmation
+    document.getElementById("oakText").textContent =
+      "Great! You chose " + playerStarter + " as your starter! You now have 5 Pokéballs. Go explore and catch Pokémon!";
+
+    // Hide starter buttons
+    starterButtons.forEach(btn => btn.style.display = "none");
+
+    // Show explore button
+    document.getElementById("exploreBtn").style.display = "inline-block";
+
+    console.log("Player starter:", playerStarter);
+  };
+});
+
+// Explore button logic (unchanged)
 document.getElementById("exploreBtn").onclick = function () {
-  // Make sure POKEMON exists
   if (!POKEMON || POKEMON.length === 0) {
     alert("POKEMON list not loaded!");
     return;
   }
 
-  // Pick a random Pokémon
   const randomIndex = Math.floor(Math.random() * POKEMON.length);
   const found = POKEMON[randomIndex];
 
-  // Display its name
   document.getElementById("result").textContent =
     "A wild " + found.name + " appeared!";
 
-  console.log(found); // Check browser console
+  console.log(found);
 };
