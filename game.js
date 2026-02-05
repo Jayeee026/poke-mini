@@ -1,12 +1,12 @@
 document.getElementById("exploreBtn").onclick = function () {
-  // Pick a random Pokémon
+  // Pick a random Pokémon from the list
   const randomIndex = Math.floor(Math.random() * POKEMON.length);
   const found = POKEMON[randomIndex];
 
-  // Show it on the page
+  // Display its name
   document.getElementById("result").textContent =
     "A wild " + found.name + " appeared!";
 
-  // For now, rarity is just for later mechanics
+  // Optional: see rarity in console for debugging
   console.log("Rarity:", found.rarity);
 };
