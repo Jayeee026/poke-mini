@@ -1,5 +1,11 @@
 document.getElementById("exploreBtn").onclick = function () {
-  // Pick a random Pokémon from the list
+  // Make sure POKEMON exists
+  if (!POKEMON || POKEMON.length === 0) {
+    alert("POKEMON list not loaded!");
+    return;
+  }
+
+  // Pick a random Pokémon
   const randomIndex = Math.floor(Math.random() * POKEMON.length);
   const found = POKEMON[randomIndex];
 
@@ -7,6 +13,5 @@ document.getElementById("exploreBtn").onclick = function () {
   document.getElementById("result").textContent =
     "A wild " + found.name + " appeared!";
 
-  // Optional: see rarity in console for debugging
-  console.log("Rarity:", found.rarity);
+  console.log(found); // Check browser console
 };
