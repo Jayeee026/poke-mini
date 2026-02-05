@@ -8,13 +8,21 @@
 
   <h1>Kanto Mini</h1>
 
-  <button id="exploreBtn">Explore</button>
+  <!-- Professor Oak Text -->
+  <p id="oakText">Hello! I am Professor Oak. Welcome to the world of Pokémon! Choose your starter Pokémon:</p>
 
+  <!-- Starter Buttons -->
+  <button class="starterBtn" data-starter="Bulbasaur">Bulbasaur</button>
+  <button class="starterBtn" data-starter="Charmander">Charmander</button>
+  <button class="starterBtn" data-starter="Squirtle">Squirtle</button>
+
+  <!-- Explore Button (hidden until starter chosen) -->
+  <button id="exploreBtn" style="display:none;">Explore</button>
+
+  <!-- Where wild Pokémon appear -->
   <p id="result"></p>
 
-  <!-- Load Pokémon data first -->
   <script src="pokemon.js"></script>
-  <!-- Then load game logic -->
   <script src="game.js"></script>
 </body>
 </html>
