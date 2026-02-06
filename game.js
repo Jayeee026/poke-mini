@@ -2,12 +2,12 @@ let playerStarter = null;
 let party = [];
 let boxes = [];
 
-// --- Rarity weights (higher = more common) ---
+// --- Rarity weights ---
 const rarityWeights = {
   common: 6,
   uncommon: 3,
   rare: 1,
-  legendary: 0.1 // very rare
+  legendary: 0.1
 };
 
 // --- Tab logic ---
@@ -24,22 +24,27 @@ tabButtons.forEach(btn => {
 });
 
 // --- Starter selection ---
-const starterButtons = document.querySelectorAll(".starterBtn");
-starterButtons.forEach(button => {
-  button.onclick = function() {
-    playerStarter = button.dataset.starter;
-    party.push(playerStarter);
+function initStarterButtons() {
+  const starterButtons = document.querySelectorAll(".starterBtn");
+  starterButtons.forEach(button => {
+    button.onclick = function() {
+      playerStarter = button.dataset.starter;
+      party.push(playerStarter);
 
-    document.getElementById("oakText").textContent =
-      "Great! You chose " + playerStarter + " as your starter! You now have 5 Pokéballs. Go explore and catch Pokémon!";
+      document.getElementById("oakText").textContent =
+        "Great! You chose " + playerStarter + " as your starter! You now have 5 Pokéballs. Go explore and catch Pokémon!";
 
-    starterButtons.forEach(btn => btn.style.display = "none");
-    document.getElementById("exploreBtn").style.display = "inline-block";
+      starterButtons.forEach(btn => btn.style.display = "none");
+      document.getElementById("exploreBtn").style.display = "inline-block";
 
-    updatePartyList();
-    console.log("Player starter:", playerStarter);
-  };
-});
+      updatePartyList();
+      console.log("Player starter:", playerStarter);
+    };
+  });
+}
+
+// Call this once to attach events
+initStarterButtons();
 
 // --- Weighted random Pokémon function ---
 function getRandomPokemon() {
@@ -47,7 +52,7 @@ function getRandomPokemon() {
 
   POKEMON.forEach(p => {
     const weight = rarityWeights[p.rarity] || 1;
-    const times = Math.ceil(weight * 10); // scale to integer
+    const times = Math.ceil(weight * 10); // scale up
     for (let i = 0; i < times; i++) {
       weightedList.push(p);
     }
@@ -57,8 +62,14 @@ function getRandomPokemon() {
   return weightedList[randomIndex];
 }
 
-// --- Explore button logic ---
-document.getElementById("exploreBtn").onclick = function() {
+// --- Explore button ---
+const exploreBtn = document.getElementById("exploreBtn");
+exploreBtn.onclick = function() {
+  if (!POKEMON || POKEMON.length === 0) {
+    alert("POKEMON list not loaded!");
+    return;
+  }
+
   const found = getRandomPokemon();
 
   document.getElementById("result").textContent =
@@ -66,7 +77,6 @@ document.getElementById("exploreBtn").onclick = function() {
 
   console.log("Found Pokémon:", found);
 
-  // Auto-add to Party if <6, else Boxes
   if (party.length < 6) {
     party.push(found.name);
     updatePartyList();
@@ -76,7 +86,7 @@ document.getElementById("exploreBtn").onclick = function() {
   }
 };
 
-// --- Update Party list (click to move to Boxes) ---
+// --- Update Party list ---
 function updatePartyList() {
   const list = document.getElementById("partyList");
   list.innerHTML = "";
@@ -87,7 +97,7 @@ function updatePartyList() {
 
     li.onclick = function() {
       boxes.push(pkm);
-      party = party.filter(p => p !== pkm); // remove by name
+      party = party.filter(p => p !== pkm);
       updatePartyList();
       updateBoxList();
     };
@@ -96,7 +106,7 @@ function updatePartyList() {
   });
 }
 
-// --- Update Boxes list (click to move to Party) ---
+// --- Update Boxes list ---
 function updateBoxList() {
   const list = document.getElementById("boxList");
   list.innerHTML = "";
