@@ -40,19 +40,19 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   function getRandomPokemon() {
-  let pool = [];
-  POKEMON.forEach(p => {
-    for (let i = 0; i < rarityWeights[p.rarity] * 10; i++) {
-      pool.push(p);
-    }
-  });
+    let pool = [];
+    POKEMON.forEach(p => {
+      for (let i = 0; i < rarityWeights[p.rarity] * 10; i++) {
+        pool.push(p);
+      }
+    });
 
-  const wild = pool[Math.floor(Math.random() * pool.length)];
+    const wild = pool[Math.floor(Math.random() * pool.length)];
 
-  // Determine shiny
-  const shiny = Math.random() < (1/512); // ~0.2% chance
-  return { ...wild, shiny };
-}
+    // Shiny chance
+    const shiny = Math.random() < (1 / 512);
+    return { ...wild, shiny };
+  }
 
   // ---------- EXPLORE ----------
   document.getElementById("exploreBtn").onclick = () => {
@@ -63,30 +63,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     currentWild = getRandomPokemon();
     document.getElementById("result").textContent =
-      `A wild ${currentWild.name} appeared!`;
+      `A wild ${currentWild.name}${currentWild.shiny ? " ✨(Shiny!)" : ""} appeared!`;
 
     document.getElementById("catchBtn").style.display = "inline-block";
   };
 
   // ---------- CATCH ----------
-  document.getElementById("result").textContent =
-  `A wild ${currentWild.name}${currentWild.shiny ? " ✨(Shiny!)" : ""} appeared!`;
+  document.getElementById("catchBtn").onclick = () => {
+    if (!currentWild) return;
 
     pokeballs--;
 
     const success = Math.random() < (currentWild.catchRate / 255);
 
+    // Determine caught name with shiny
+    const caughtName = currentWild.shiny ? `${currentWild.name} ✨(Shiny!)` : currentWild.name;
+
     if (success) {
-      if (party.length < 6) party.push(currentWild.name);
-      else boxes.push(currentWild.name);
+      if (party.length < 6) party.push(caughtName);
+      else boxes.push(caughtName);
 
       money += 200; // reward for catching
-
       document.getElementById("result").textContent =
-        `Gotcha! ${currentWild.name} was caught! (+₽200)`;
+        `Gotcha! ${caughtName} was caught! (+₽200)`;
     } else {
       document.getElementById("result").textContent =
-        `${currentWild.name} escaped!`;
+        `${caughtName} escaped!`;
     }
 
     currentWild = null;
@@ -143,12 +145,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const li = document.createElement("li");
       li.textContent = p;
       li.onclick = () => {
-        // Party
-if (party.length < 6) {
-  party.push(currentWild.shiny ? currentWild.name + " ✨(Shiny!)" : currentWild.name);
-} else {
-  boxes.push(currentWild.shiny ? currentWild.name + " ✨(Shiny!)" : currentWild.name);
-}
+        if (party.length >= 6) return alert("Party full!");
+        party.push(p);
         boxes = boxes.filter(x => x !== p);
         updateParty();
         updateBoxes();
@@ -156,5 +154,8 @@ if (party.length < 6) {
       list.appendChild(li);
     });
   }
+
+  // Initialize UI immediately
+  updateUI();
 
 });
