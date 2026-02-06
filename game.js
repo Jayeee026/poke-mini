@@ -40,14 +40,19 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   function getRandomPokemon() {
-    let pool = [];
-    POKEMON.forEach(p => {
-      for (let i = 0; i < rarityWeights[p.rarity] * 10; i++) {
-        pool.push(p);
-      }
-    });
-    return pool[Math.floor(Math.random() * pool.length)];
-  }
+  let pool = [];
+  POKEMON.forEach(p => {
+    for (let i = 0; i < rarityWeights[p.rarity] * 10; i++) {
+      pool.push(p);
+    }
+  });
+
+  const wild = pool[Math.floor(Math.random() * pool.length)];
+
+  // Determine shiny
+  const shiny = Math.random() < (1/512); // ~0.2% chance
+  return { ...wild, shiny };
+}
 
   // ---------- EXPLORE ----------
   document.getElementById("exploreBtn").onclick = () => {
@@ -64,8 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // ---------- CATCH ----------
-  document.getElementById("catchBtn").onclick = () => {
-    if (!currentWild) return;
+  document.getElementById("result").textContent =
+  `A wild ${currentWild.name}${currentWild.shiny ? " ✨(Shiny!)" : ""} appeared!`;
 
     pokeballs--;
 
@@ -138,8 +143,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const li = document.createElement("li");
       li.textContent = p;
       li.onclick = () => {
-        if (party.length >= 6) return alert("Party full!");
-        party.push(p);
+        // Party
+if (party.length < 6) {
+  party.push(currentWild.shiny ? currentWild.name + " ✨(Shiny!)" : currentWild.name);
+} else {
+  boxes.push(currentWild.shiny ? currentWild.name + " ✨(Shiny!)" : currentWild.name);
+}
         boxes = boxes.filter(x => x !== p);
         updateParty();
         updateBoxes();
