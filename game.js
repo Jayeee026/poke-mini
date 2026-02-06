@@ -3,34 +3,32 @@ let boxes = [];
 let pokeballs = 5;
 let currentWild = null;
 
-// ---------- TAB LOGIC ----------
+// ---------- TABS ----------
 document.querySelectorAll(".tabBtn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const tab = btn.dataset.tab;
+  btn.onclick = () => {
     document.querySelectorAll(".tabSection").forEach(sec => {
-      sec.style.display = sec.id === tab ? "block" : "none";
+      sec.style.display = sec.id === btn.dataset.tab ? "block" : "none";
     });
-  });
+  };
 });
 
 // ---------- STARTER ----------
 document.querySelectorAll(".starterBtn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const starter = btn.dataset.starter;
-    party.push(starter);
+  btn.onclick = () => {
+    party.push(btn.dataset.starter);
 
     document.getElementById("oakText").textContent =
-      `Great choice! ${starter} is now your partner! You received 5 Pokéballs.`;
+      `Great choice! You received 5 Pokéballs!`;
 
     document.querySelectorAll(".starterBtn").forEach(b => b.style.display = "none");
     document.getElementById("exploreBtn").style.display = "inline-block";
 
     updateParty();
-    updateUI();
-  });
+    updateExploreText();
+  };
 });
 
-// ---------- RARITY WEIGHTS ----------
+// ---------- RARITY ----------
 const rarityWeights = {
   common: 80,
   uncommon: 18,
@@ -39,10 +37,9 @@ const rarityWeights = {
 };
 
 function getRandomPokemon() {
-  let pool = [];
+  const pool = [];
   POKEMON.forEach(p => {
-    const weight = rarityWeights[p.rarity];
-    for (let i = 0; i < weight * 10; i++) {
+    for (let i = 0; i < rarityWeights[p.rarity] * 10; i++) {
       pool.push(p);
     }
   });
@@ -50,51 +47,51 @@ function getRandomPokemon() {
 }
 
 // ---------- EXPLORE ----------
-document.getElementById("exploreBtn").addEventListener("click", () => {
+document.getElementById("exploreBtn").onclick = () => {
   if (pokeballs <= 0) {
-    document.getElementById("result").textContent =
-      "You are out of Pokéballs!";
+    document.getElementById("result").textContent = "You have no Pokéballs!";
     return;
   }
 
   currentWild = getRandomPokemon();
   document.getElementById("result").textContent =
-    `A wild ${currentWild.name} appeared! (Catch rate: ${currentWild.catchRate})`;
+    `A wild ${currentWild.name} appeared!`;
 
-  updateUI();
-});
+  document.getElementById("catchBtn").style.display = "inline-block";
+};
 
-// ---------- TRY TO CATCH ----------
-document.getElementById("result").addEventListener("click", () => {
+// ---------- CATCH ----------
+document.getElementById("catchBtn").onclick = () => {
   if (!currentWild || pokeballs <= 0) return;
 
   pokeballs--;
 
-  const catchChance = currentWild.catchRate / 255;
-  const roll = Math.random();
+  const chance = currentWild.catchRate / 255;
+  const success = Math.random() < chance;
 
-  if (roll < catchChance) {
+  if (success) {
     if (party.length < 6) {
       party.push(currentWild.name);
     } else {
       boxes.push(currentWild.name);
     }
-
     document.getElementById("result").textContent =
       `Gotcha! ${currentWild.name} was caught!`;
   } else {
     document.getElementById("result").textContent =
-      `${currentWild.name} broke free and fled!`;
+      `${currentWild.name} broke free!`;
   }
 
   currentWild = null;
+  document.getElementById("catchBtn").style.display = "none";
+
   updateParty();
   updateBoxes();
-  updateUI();
-});
+  updateExploreText();
+};
 
 // ---------- UI ----------
-function updateUI() {
+function updateExploreText() {
   document.getElementById("exploreBtn").textContent =
     `Explore (Pokéballs: ${pokeballs})`;
 }
@@ -103,18 +100,15 @@ function updateUI() {
 function updateParty() {
   const list = document.getElementById("partyList");
   list.innerHTML = "";
-
-  party.forEach(pkm => {
+  party.forEach(p => {
     const li = document.createElement("li");
-    li.textContent = pkm;
-
+    li.textContent = p;
     li.onclick = () => {
-      boxes.push(pkm);
-      party = party.filter(p => p !== pkm);
+      boxes.push(p);
+      party = party.filter(x => x !== p);
       updateParty();
       updateBoxes();
     };
-
     list.appendChild(li);
   });
 }
@@ -123,22 +117,16 @@ function updateParty() {
 function updateBoxes() {
   const list = document.getElementById("boxList");
   list.innerHTML = "";
-
-  boxes.forEach(pkm => {
+  boxes.forEach(p => {
     const li = document.createElement("li");
-    li.textContent = pkm;
-
+    li.textContent = p;
     li.onclick = () => {
-      if (party.length >= 6) {
-        alert("Party is full!");
-        return;
-      }
-      party.push(pkm);
-      boxes = boxes.filter(p => p !== pkm);
+      if (party.length >= 6) return alert("Party full!");
+      party.push(p);
+      boxes = boxes.filter(x => x !== p);
       updateParty();
       updateBoxes();
     };
-
     list.appendChild(li);
   });
 }
