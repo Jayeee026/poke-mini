@@ -7,9 +7,8 @@
 </head>
 <body>
 
-<h1>Mini Pokémon Game</h1>
+<h1>Mini Pokémon Web Game</h1>
 
-<!-- Tabs -->
 <div>
   <button class="tabBtn" data-tab="start">Start</button>
   <button class="tabBtn" data-tab="wild">Wild</button>
@@ -17,35 +16,33 @@
   <button class="tabBtn" data-tab="boxes">Boxes</button>
 </div>
 
-<!-- START TAB -->
 <div id="start" class="tabSection">
-  <p id="oakText">Hello there! Welcome to the world of Pokémon! Choose your starter!</p>
+  <p id="oakText">
+    Hello there! Welcome to the world of Pokémon! Choose your starter!
+  </p>
 
   <button class="starterBtn" data-starter="Bulbasaur">Bulbasaur</button>
   <button class="starterBtn" data-starter="Charmander">Charmander</button>
   <button class="starterBtn" data-starter="Squirtle">Squirtle</button>
 </div>
 
-<!-- WILD TAB -->
 <div id="wild" class="tabSection" style="display:none;">
+  <p id="pokeballText">Pokéballs: 5</p>
   <button id="exploreBtn" style="display:none;">Explore</button>
   <button id="catchBtn" style="display:none;">Throw Pokéball</button>
   <p id="result"></p>
 </div>
 
-<!-- PARTY TAB -->
 <div id="party" class="tabSection" style="display:none;">
-  <h2>Your Party (click to move to box)</h2>
+  <h2>Party (click to send to box)</h2>
   <ul id="partyList"></ul>
 </div>
 
-<!-- BOXES TAB -->
 <div id="boxes" class="tabSection" style="display:none;">
-  <h2>Your Boxes (click to move to party)</h2>
+  <h2>Boxes (click to move to party)</h2>
   <ul id="boxList"></ul>
 </div>
 
-<!-- IMPORTANT: SCRIPT ORDER -->
 <script src="pokemon.js"></script>
 <script src="game.js"></script>
 
