@@ -48,7 +48,6 @@ document.getElementById("exploreBtn").onclick = function() {
 
   console.log(found);
 
-  // Auto-add to party if less than 6 Pokémon
   if (party.length < 6) {
     party.push(found.name);
     updatePartyList();
@@ -58,19 +57,20 @@ document.getElementById("exploreBtn").onclick = function() {
   }
 };
 
-// --- Update Party list with click-to-box ---
+// --- Update Party list ---
 function updatePartyList() {
   const list = document.getElementById("partyList");
   list.innerHTML = "";
 
-  party.forEach((pkm, index) => {
+  party.forEach(pkm => {
     const li = document.createElement("li");
     li.textContent = pkm;
 
     // Move to Boxes on click
     li.onclick = function() {
       boxes.push(pkm);
-      party.splice(index, 1);
+      // Remove this Pokémon from Party by name
+      party = party.filter(p => p !== pkm);
       updatePartyList();
       updateBoxList();
     };
@@ -79,12 +79,12 @@ function updatePartyList() {
   });
 }
 
-// --- Update Boxes list with click-to-party ---
+// --- Update Boxes list ---
 function updateBoxList() {
   const list = document.getElementById("boxList");
   list.innerHTML = "";
 
-  boxes.forEach((pkm, index) => {
+  boxes.forEach(pkm => {
     const li = document.createElement("li");
     li.textContent = pkm;
 
@@ -95,7 +95,8 @@ function updateBoxList() {
         return;
       }
       party.push(pkm);
-      boxes.splice(index, 1);
+      // Remove this Pokémon from Boxes by name
+      boxes = boxes.filter(p => p !== pkm);
       updatePartyList();
       updateBoxList();
     };
