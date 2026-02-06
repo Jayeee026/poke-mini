@@ -1,41 +1,81 @@
 let playerStarter = null;
+let party = [];
+let boxes = [];
 
-// Starter button logic
+// --- Tab logic ---
+const tabButtons = document.querySelectorAll(".tabBtn");
+const tabSections = document.querySelectorAll(".tabSection");
+
+tabButtons.forEach(btn => {
+  btn.onclick = function() {
+    const tab = btn.dataset.tab;
+    tabSections.forEach(section => {
+      section.style.display = section.id === tab ? "block" : "none";
+    });
+  };
+});
+
+// --- Starter selection ---
 const starterButtons = document.querySelectorAll(".starterBtn");
-
 starterButtons.forEach(button => {
   button.onclick = function() {
-    // Save starter choice
     playerStarter = button.dataset.starter;
+    party.push(playerStarter); // Add starter to party
 
-    // Update Oak text
     document.getElementById("oakText").textContent =
       "Great! You chose " + playerStarter + " as your starter! You now have 5 Pokéballs. Go explore and catch Pokémon!";
 
-    // Hide starter buttons
     starterButtons.forEach(btn => btn.style.display = "none");
-
-    // Show Explore button
     document.getElementById("exploreBtn").style.display = "inline-block";
+
+    updatePartyList();
 
     console.log("Player starter:", playerStarter);
   };
 });
 
-// Explore button logic
-document.getElementById("exploreBtn").onclick = function () {
+// --- Explore button logic ---
+document.getElementById("exploreBtn").onclick = function() {
   if (!POKEMON || POKEMON.length === 0) {
     alert("POKEMON list not loaded!");
     return;
   }
 
-  // Pick a random Pokémon
   const randomIndex = Math.floor(Math.random() * POKEMON.length);
   const found = POKEMON[randomIndex];
 
-  // Show it on the page
   document.getElementById("result").textContent =
     "A wild " + found.name + " appeared!";
 
   console.log(found);
+
+  // Auto-add to party if less than 6 Pokémon (temporary catch mechanic)
+  if (party.length < 6) {
+    party.push(found.name);
+    updatePartyList();
+  } else {
+    boxes.push(found.name);
+    updateBoxList();
+  }
 };
+
+// --- Update Party and Box lists ---
+function updatePartyList() {
+  const list = document.getElementById("partyList");
+  list.innerHTML = "";
+  party.forEach(pkm => {
+    const li = document.createElement("li");
+    li.textContent = pkm;
+    list.appendChild(li);
+  });
+}
+
+function updateBoxList() {
+  const list = document.getElementById("boxList");
+  list.innerHTML = "";
+  boxes.forEach(pkm => {
+    const li = document.createElement("li");
+    li.textContent = pkm;
+    list.appendChild(li);
+  });
+}
