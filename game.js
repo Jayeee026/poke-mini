@@ -58,7 +58,7 @@ document.getElementById("exploreBtn").onclick = function() {
   }
 };
 
-// --- Update Party and Box lists ---
+// --- Update Party list with click-to-box ---
 function updatePartyList() {
   const list = document.getElementById("partyList");
   list.innerHTML = "";
@@ -67,11 +67,10 @@ function updatePartyList() {
     const li = document.createElement("li");
     li.textContent = pkm;
 
-    // Add click-to-send-to-box functionality
+    // Move to Boxes on click
     li.onclick = function() {
-      // Move this Pokémon to boxes
       boxes.push(pkm);
-      party.splice(index, 1); // remove from party
+      party.splice(index, 1);
       updatePartyList();
       updateBoxList();
     };
@@ -80,12 +79,27 @@ function updatePartyList() {
   });
 }
 
+// --- Update Boxes list with click-to-party ---
 function updateBoxList() {
   const list = document.getElementById("boxList");
   list.innerHTML = "";
-  boxes.forEach(pkm => {
+
+  boxes.forEach((pkm, index) => {
     const li = document.createElement("li");
     li.textContent = pkm;
+
+    // Move back to Party on click
+    li.onclick = function() {
+      if (party.length >= 6) {
+        alert("Party is full! You can only have 6 Pokémon.");
+        return;
+      }
+      party.push(pkm);
+      boxes.splice(index, 1);
+      updatePartyList();
+      updateBoxList();
+    };
+
     list.appendChild(li);
   });
 }
