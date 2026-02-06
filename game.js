@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let party = [];
   let boxes = [];
   let pokeballs = 5;
+  let money = 3000;
   let currentWild = null;
 
   // ---------- TABS ----------
@@ -20,13 +21,13 @@ document.addEventListener("DOMContentLoaded", () => {
       party.push(btn.dataset.starter);
 
       document.getElementById("oakText").textContent =
-        "Great choice! You received 5 Pokéballs!";
+        "Great choice! You received 5 Pokéballs and ₽3000!";
 
       document.querySelectorAll(".starterBtn").forEach(b => b.style.display = "none");
       document.getElementById("exploreBtn").style.display = "inline-block";
 
-      updateParty();
       updateUI();
+      updateParty();
     };
   });
 
@@ -58,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     currentWild = getRandomPokemon();
     document.getElementById("result").textContent =
       `A wild ${currentWild.name} appeared!`;
+
     document.getElementById("catchBtn").style.display = "inline-block";
   };
 
@@ -67,15 +69,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     pokeballs--;
 
-    const chance = currentWild.catchRate / 255;
-    const success = Math.random() < chance;
+    const success = Math.random() < (currentWild.catchRate / 255);
 
     if (success) {
       if (party.length < 6) party.push(currentWild.name);
       else boxes.push(currentWild.name);
 
+      money += 200; // reward for catching
+
       document.getElementById("result").textContent =
-        `Gotcha! ${currentWild.name} was caught!`;
+        `Gotcha! ${currentWild.name} was caught! (+₽200)`;
     } else {
       document.getElementById("result").textContent =
         `${currentWild.name} escaped!`;
@@ -89,10 +92,25 @@ document.addEventListener("DOMContentLoaded", () => {
     updateUI();
   };
 
+  // ---------- SHOP ----------
+  document.getElementById("buyBallBtn").onclick = () => {
+    if (money < 200) {
+      alert("Not enough money!");
+      return;
+    }
+    money -= 200;
+    pokeballs += 1;
+    updateUI();
+  };
+
   // ---------- UI ----------
   function updateUI() {
     document.getElementById("pokeballText").textContent =
       `Pokéballs: ${pokeballs}`;
+    document.getElementById("moneyText").textContent =
+      `Money: ₽${money}`;
+    document.getElementById("shopMoney").textContent =
+      `Money: ₽${money}`;
   }
 
   // ---------- PARTY ----------
