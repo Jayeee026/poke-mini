@@ -20,7 +20,7 @@ const starterButtons = document.querySelectorAll(".starterBtn");
 starterButtons.forEach(button => {
   button.onclick = function() {
     playerStarter = button.dataset.starter;
-    party.push(playerStarter); // Add starter to party
+    party.push(playerStarter);
 
     document.getElementById("oakText").textContent =
       "Great! You chose " + playerStarter + " as your starter! You now have 5 Pokéballs. Go explore and catch Pokémon!";
@@ -29,7 +29,6 @@ starterButtons.forEach(button => {
     document.getElementById("exploreBtn").style.display = "inline-block";
 
     updatePartyList();
-
     console.log("Player starter:", playerStarter);
   };
 });
@@ -49,7 +48,7 @@ document.getElementById("exploreBtn").onclick = function() {
 
   console.log(found);
 
-  // Auto-add to party if less than 6 Pokémon (temporary catch mechanic)
+  // Auto-add to party if less than 6 Pokémon
   if (party.length < 6) {
     party.push(found.name);
     updatePartyList();
@@ -63,9 +62,20 @@ document.getElementById("exploreBtn").onclick = function() {
 function updatePartyList() {
   const list = document.getElementById("partyList");
   list.innerHTML = "";
-  party.forEach(pkm => {
+
+  party.forEach((pkm, index) => {
     const li = document.createElement("li");
     li.textContent = pkm;
+
+    // Add click-to-send-to-box functionality
+    li.onclick = function() {
+      // Move this Pokémon to boxes
+      boxes.push(pkm);
+      party.splice(index, 1); // remove from party
+      updatePartyList();
+      updateBoxList();
+    };
+
     list.appendChild(li);
   });
 }
