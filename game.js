@@ -1,5 +1,7 @@
 let party = [];
 let boxes = [];
+let pokeballs = 5;
+let currentWild = null;
 
 // ---------- TAB LOGIC ----------
 document.querySelectorAll(".tabBtn").forEach(btn => {
@@ -18,50 +20,84 @@ document.querySelectorAll(".starterBtn").forEach(btn => {
     party.push(starter);
 
     document.getElementById("oakText").textContent =
-      `Great choice! ${starter} is now your partner!`;
+      `Great choice! ${starter} is now your partner! You received 5 Pokéballs.`;
 
     document.querySelectorAll(".starterBtn").forEach(b => b.style.display = "none");
     document.getElementById("exploreBtn").style.display = "inline-block";
 
     updateParty();
+    updateUI();
   });
 });
 
-// ---------- RARITY SYSTEM ----------
+// ---------- RARITY WEIGHTS ----------
 const rarityWeights = {
-  common: 80,      // very common
-  uncommon: 18,    // sometimes
-  rare: 2,         // HARD to find
-  legendary: 0.2   // EXTREMELY rare
+  common: 80,
+  uncommon: 18,
+  rare: 2,
+  legendary: 0.2
 };
 
 function getRandomPokemon() {
   let pool = [];
-
   POKEMON.forEach(p => {
-    for (let i = 0; i < rarityWeights[p.rarity]; i++) {
+    const weight = rarityWeights[p.rarity];
+    for (let i = 0; i < weight * 10; i++) {
       pool.push(p);
     }
   });
-
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
 // ---------- EXPLORE ----------
 document.getElementById("exploreBtn").addEventListener("click", () => {
-  const found = getRandomPokemon();
-  document.getElementById("result").textContent =
-    `A wild ${found.name} appeared!`;
-
-  if (party.length < 6) {
-    party.push(found.name);
-  } else {
-    boxes.push(found.name);
+  if (pokeballs <= 0) {
+    document.getElementById("result").textContent =
+      "You are out of Pokéballs!";
+    return;
   }
 
+  currentWild = getRandomPokemon();
+  document.getElementById("result").textContent =
+    `A wild ${currentWild.name} appeared! (Catch rate: ${currentWild.catchRate})`;
+
+  updateUI();
+});
+
+// ---------- TRY TO CATCH ----------
+document.getElementById("result").addEventListener("click", () => {
+  if (!currentWild || pokeballs <= 0) return;
+
+  pokeballs--;
+
+  const catchChance = currentWild.catchRate / 255;
+  const roll = Math.random();
+
+  if (roll < catchChance) {
+    if (party.length < 6) {
+      party.push(currentWild.name);
+    } else {
+      boxes.push(currentWild.name);
+    }
+
+    document.getElementById("result").textContent =
+      `Gotcha! ${currentWild.name} was caught!`;
+  } else {
+    document.getElementById("result").textContent =
+      `${currentWild.name} broke free and fled!`;
+  }
+
+  currentWild = null;
   updateParty();
   updateBoxes();
+  updateUI();
 });
+
+// ---------- UI ----------
+function updateUI() {
+  document.getElementById("exploreBtn").textContent =
+    `Explore (Pokéballs: ${pokeballs})`;
+}
 
 // ---------- PARTY ----------
 function updateParty() {
