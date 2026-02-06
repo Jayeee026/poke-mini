@@ -8,24 +8,37 @@
 
   <h1>Kanto Mini</h1>
 
-  <!-- Professor Oak Intro -->
-  <p id="oakText">
-    Hello! I am Professor Oak. Welcome to the world of Pokémon! Choose your starter Pokémon:
-  </p>
+  <!-- Tabs -->
+  <div id="tabs">
+    <button class="tabBtn" data-tab="wild">Wild</button>
+    <button class="tabBtn" data-tab="party">Party</button>
+    <button class="tabBtn" data-tab="boxes">Boxes</button>
+  </div>
 
-  <!-- Starter Buttons -->
-  <button class="starterBtn" data-starter="Bulbasaur">Bulbasaur</button>
-  <button class="starterBtn" data-starter="Charmander">Charmander</button>
-  <button class="starterBtn" data-starter="Squirtle">Squirtle</button>
+  <!-- Wild Section -->
+  <div id="wild" class="tabSection">
+    <p id="oakText">Hello! I am Professor Oak. Choose your starter Pokémon:</p>
+    <button class="starterBtn" data-starter="Bulbasaur">Bulbasaur</button>
+    <button class="starterBtn" data-starter="Charmander">Charmander</button>
+    <button class="starterBtn" data-starter="Squirtle">Squirtle</button>
 
-  <!-- Explore Button (hidden until starter chosen) -->
-  <button id="exploreBtn" style="display:none;">Explore</button>
+    <button id="exploreBtn" style="display:none;">Explore</button>
+    <p id="result"></p>
+  </div>
 
-  <!-- Where wild Pokémon appear -->
-  <p id="result"></p>
+  <!-- Party Section -->
+  <div id="party" class="tabSection" style="display:none;">
+    <h2>Your Party</h2>
+    <ul id="partyList"></ul>
+  </div>
 
-  <!-- Scripts (add cache-buster to avoid old version loading) -->
-  <script src="pokemon.js?v=1"></script>
-  <script src="game.js?v=1"></script>
+  <!-- Boxes Section -->
+  <div id="boxes" class="tabSection" style="display:none;">
+    <h2>Your Boxes</h2>
+    <ul id="boxList"></ul>
+  </div>
+
+  <script src="pokemon.js?v=2"></script>
+  <script src="game.js?v=2"></script>
 </body>
 </html>
