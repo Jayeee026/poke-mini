@@ -29,10 +29,10 @@ document.querySelectorAll(".starterBtn").forEach(btn => {
 
 // ---------- RARITY SYSTEM ----------
 const rarityWeights = {
-  common: 60,
-  uncommon: 25,
-  rare: 10,
-  legendary: 5
+  common: 80,      // very common
+  uncommon: 18,    // sometimes
+  rare: 2,         // HARD to find
+  legendary: 0.2   // EXTREMELY rare
 };
 
 function getRandomPokemon() {
