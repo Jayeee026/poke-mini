@@ -6,6 +6,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let money = 3000;
   let currentWild = null;
 
+  // ---------- TEST MODE ----------
+  // Set to true to see shinies frequently for testing
+  const shinyTestMode = false;
+
   // ---------- TABS ----------
   document.querySelectorAll(".tabBtn").forEach(btn => {
     btn.onclick = () => {
@@ -49,8 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const wild = pool[Math.floor(Math.random() * pool.length)];
 
-    // Shiny chance
-    const shiny = Math.random() < (1 / 512);
+    // Shiny logic
+    let shiny = Math.random() < (1 / 512);
+    if (shinyTestMode) shiny = true; // Force shiny for testing
+
     return { ...wild, shiny };
   }
 
@@ -62,6 +68,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     currentWild = getRandomPokemon();
+
+    // Show shiny visually
     document.getElementById("result").textContent =
       `A wild ${currentWild.name}${currentWild.shiny ? " ✨(Shiny!)" : ""} appeared!`;
 
@@ -76,8 +84,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const success = Math.random() < (currentWild.catchRate / 255);
 
-    // Determine caught name with shiny
-    const caughtName = currentWild.shiny ? `${currentWild.name} ✨(Shiny!)` : currentWild.name;
+    const caughtName = currentWild.shiny
+      ? `${currentWild.name} ✨(Shiny!)`
+      : currentWild.name;
 
     if (success) {
       if (party.length < 6) party.push(caughtName);
