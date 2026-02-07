@@ -38,12 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const base = POKEMON[Math.floor(Math.random() * POKEMON.length)];
 
     let shiny;
-    if (SHINY_TEST_MODE) {
-      shiny = Math.random() < 0.5; // 50% for testing
-    } else {
-      shiny = Math.random() < (1 / 512); // real odds
-    }
-
+if (SHINY_TEST_MODE) {
+  shiny = Math.random() < 0.5; // testing only
+} else {
+  shiny = Math.random() < (1 / 512); // real odds
+}
     console.log("Spawned:", base.name, "Shiny:", shiny);
 
     return {
