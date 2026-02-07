@@ -74,7 +74,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     pokeballs--;
 
-    const success = Math.random() < (currentWild.catchRate / 255);
+   // Poké Ball modifier (Poké Ball = 1.0)
+const ballBonus = 1.0;
+
+// Add difficulty randomness
+const baseChance = currentWild.catchRate / 255;
+const finalChance = baseChance * ballBonus * (0.5 + Math.random() * 0.5);
+
+const success = Math.random() < finalChance;
     const displayName = currentWild.shiny
       ? `${currentWild.name} ✨SHINY✨`
       : currentWild.name;
