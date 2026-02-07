@@ -2,15 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Mini Pokémon Web Game</title>
+  <title>Mini Pokémon Game</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Mini Pokémon Web Game</h1>
+<h1>Mini Pokémon Game</h1>
 
-<!-- Tabs -->
-<div>
+<div id="tabs">
   <button class="tabBtn" data-tab="start">Start</button>
   <button class="tabBtn" data-tab="wild">Wild</button>
   <button class="tabBtn" data-tab="party">Party</button>
@@ -18,45 +17,37 @@
   <button class="tabBtn" data-tab="shop">Shop</button>
 </div>
 
-<!-- START -->
 <div id="start" class="tabSection">
-  <p id="oakText">Hello there! Welcome to the world of Pokémon! Choose your starter!</p>
-
+  <p id="oakText">Hello! Choose your starter Pokémon!</p>
   <button class="starterBtn" data-starter="Bulbasaur">Bulbasaur</button>
   <button class="starterBtn" data-starter="Charmander">Charmander</button>
   <button class="starterBtn" data-starter="Squirtle">Squirtle</button>
 </div>
 
-<!-- WILD -->
 <div id="wild" class="tabSection" style="display:none;">
-  <p id="pokeballText">Pokéballs: 5</p>
-  <p id="moneyText">Money: ₽3000</p>
+  <p id="pokeballText"></p>
   <button id="exploreBtn" style="display:none;">Explore</button>
   <button id="catchBtn" style="display:none;">Throw Pokéball</button>
   <p id="result"></p>
 </div>
 
-<!-- PARTY -->
 <div id="party" class="tabSection" style="display:none;">
-  <h2>Party (click to send to box)</h2>
+  <h3>Your Party (click to send to box)</h3>
   <ul id="partyList"></ul>
 </div>
 
-<!-- BOXES -->
 <div id="boxes" class="tabSection" style="display:none;">
-  <h2>Boxes (click to move to party)</h2>
+  <h3>Your Boxes (click to add to party)</h3>
   <ul id="boxList"></ul>
 </div>
 
-<!-- SHOP -->
 <div id="shop" class="tabSection" style="display:none;">
-  <h2>Poké Mart</h2>
-  <p id="shopMoney">Money: ₽3000</p>
+  <h3>Poké Mart</h3>
+  <p id="shopMoney"></p>
   <button id="buyBallBtn">Buy Pokéball (₽200)</button>
 </div>
 
 <script src="pokemon.js"></script>
 <script src="game.js"></script>
-
 </body>
 </html>
