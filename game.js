@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 🔧 SHINY SETTINGS
   // CHANGE THIS TO false AFTER YOU SEE SHINIES
-  const SHINY_TEST_MODE = true;
+  const SHINY_TEST_MODE = false;
 
   // ---------- TABS ----------
   document.querySelectorAll(".tabBtn").forEach(btn => {
